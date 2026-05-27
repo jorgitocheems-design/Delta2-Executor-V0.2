@@ -89,15 +89,14 @@
             box-shadow: 0 0 10px #00ffff;
         }
 
-        /* Sección de Comentarios Nueva con más espacio táctil */
+        /* NUEVA SECCIÓN DE COMENTARIOS HACKER */
         .comments-section {
             background-color: #151a26;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             text-align: left;
             border: 1px solid #00ffff33;
             margin-top: 20px;
-            min-height: 200px; /* Le da altura fija para que no se contraiga en el móvil */
         }
 
         .comments-title {
@@ -106,6 +105,60 @@
             margin-bottom: 15px;
             text-align: center;
             font-weight: bold;
+        }
+
+        .comment-input, .comment-textarea {
+            width: 100%;
+            background-color: #1a2232;
+            border: 1px solid #00ffff55;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
+        .comment-input:focus, .comment-textarea:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 5px #00ffff;
+        }
+
+        .comment-btn {
+            background-color: #00ffff;
+            color: #121620;
+            border: none;
+            padding: 10px 15px;
+            font-weight: bold;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .comments-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .comment-card {
+            background-color: #1a2232;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 3px solid #00ffff;
+        }
+
+        .comment-author {
+            color: #00ffff;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .comment-text {
+            color: #b0bddb;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -133,18 +186,58 @@
         <div class="comments-section">
             <div class="comments-title">💬 Zona de Opiniones</div>
             
-            <div id="cusdis_thread"
-              data-host="https://cusdis.com"
-              data-app-id="9fa47d4e-bba1-419b-bcfa-01826fdb75ba"
-              data-page-id="delta2web_page_v2"
-              data-page-url="https://jorgitocheems-design.github.io/Delta2-Executor-V0.2/delta2web.html"
-              data-page-title="Delta2 Executor"
-              data-theme="dark">
+            <input type="text" id="author" class="comment-input" placeholder="Tu Nombre / Apodo">
+            <textarea id="commentText" class="comment-textarea" rows="3" placeholder="Escribe tu comentario aquí..."></textarea>
+            <button onclick="agregarComentario()" class="comment-btn">Publicar Comentario</button>
+
+            <div class="comments-list" id="commentsList">
+                <div class="comment-card">
+                    <div class="comment-author">🤖 Sistema Delta2</div>
+                    <div class="comment-text">¡Bienvenidos! Dejen sus opiniones y reportes aquí abajo. El ejecutable está al 100%.</div>
+                </div>
             </div>
-            
-            <script async src="https://cusdis.com/js/cusdis.es.js"></script>
         </div>
     </div>
+
+    <script>
+        // Cargar comentarios guardados al abrir la página
+        window.onload = function() {
+            let guardados = localStorage.getItem('delta2_comments');
+            if(guardados) {
+                document.getElementById('commentsList').innerHTML += guardados;
+            }
+        }
+
+        function agregarComentario() {
+            let nombre = document.getElementById('author').value.trim();
+            let texto = document.getElementById('commentText').value.trim();
+
+            if(nombre === "" || texto === "") {
+                alert("¡Bro, llena ambos campos antes de publicar!");
+                return;
+            }
+
+            // Crear la estructura del comentario
+            let nuevoComentario = `
+                <div class="comment-card">
+                    <div class="comment-author">👤 ${nombre}</div>
+                    <div class="comment-text">${texto}</div>
+                </div>
+            `;
+
+            // Agregar el comentario a la lista
+            let lista = document.getElementById('commentsList');
+            lista.innerHTML += nuevoComentario;
+
+            // Guardar en la memoria del navegador (LocalStorage)
+            let actuales = localStorage.getItem('delta2_comments') || "";
+            localStorage.setItem('delta2_comments', actuales + nuevoComentario);
+
+            // Limpiar los campos de texto
+            document.getElementById('author').value = "";
+            document.getElementById('commentText').value = "";
+        }
+    </script>
 
 </body>
 </html>
